@@ -46,6 +46,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)initWithImage:(nullable UIImage *)image;
 
+/*!
+ *@author Babul Prabhakar
+ * @discussion Load with URL
+ * @param url Str
+ * @return An initialized `JSQPhotoMediaItem` if successful, `nil` otherwise.
+ */
+-(instancetype)initWithURL:(NSURL *)url;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -44,6 +44,17 @@
     return self;
 }
 
+-(instancetype)initWithURL:(NSURL *)url {
+    
+    self = [super init];
+    if (self) {
+        _image = nil;
+        _cachedImageView = nil;
+        _url = url;
+    }
+    return self;
+    
+}
 - (void)clearCachedMediaViews
 {
     [super clearCachedMediaViews];

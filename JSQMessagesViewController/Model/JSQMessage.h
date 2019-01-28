@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (copy, nonatomic, readonly, null_unspecified) id<JSQMessageMediaData> media;
 
-
+@property (nonatomic,strong)id message;
 #pragma mark - Initialization
 
 /**
@@ -137,6 +137,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  Not a valid initializer.
  */
 - (id)init NS_UNAVAILABLE;
+
 
 @end
 
