@@ -94,16 +94,13 @@
         if (self.image == nil && _url != nil) {
             
             __weak UIImageView *weakCell = self.cachedImageView;
-            [weakCell setImageWithURLRequest:[NSURLRequest requestWithURL:_url] placeholderImage:nil
-                                     success:^(NSURLRequest *request,   NSHTTPURLResponse *response, UIImage *image) {
-                                         if (weakCell)
-                                         {
-                                             weakCell.image = image;
-                                             [weakCell setNeedsLayout];
-                                         }
-                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                         NSLog(@"Error: %@", error);
-                                     }];
+            
+            [weakCell sd_setImageWithURL:_url completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                if (weakCell) {
+                    weakCell.image = image;
+                    [weakCell setNeedsLayout];
+                }
+            }];
         }
         
     }
