@@ -20,7 +20,7 @@
 
 #import "JSQMessagesMediaPlaceholderView.h"
 #import "JSQMessagesMediaViewBubbleImageMasker.h"
-
+#import <SDWebImage/UIImageView+WebCache.h>
 #import <MobileCoreServices/UTCoreTypes.h>
 
 @interface JSQPhotoMediaItem ()
@@ -31,7 +31,7 @@
 
 
 @implementation JSQPhotoMediaItem
-
+@synthesize url = _url;
 #pragma mark - Initialization
 
 - (instancetype)initWithImage:(UIImage *)image
@@ -44,6 +44,17 @@
     return self;
 }
 
+-(instancetype)initWithURL:(NSURL *)url {
+    
+    self = [super init];
+    if (self) {
+        _image = nil;
+        _cachedImageView = nil;
+        _url = url;
+    }
+    return self;
+    
+}
 - (void)clearCachedMediaViews
 {
     [super clearCachedMediaViews];
@@ -68,18 +79,33 @@
 
 - (UIView *)mediaView
 {
-    if (self.image == nil) {
-        return nil;
-    }
     
     if (self.cachedImageView == nil) {
         CGSize size = [self mediaViewDisplaySize];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:self.image];
+        UIImageView *imageView = [[UIImageView alloc] init];
+        if (self.image) {
+            imageView.image = self.image;
+        }
         imageView.frame = CGRectMake(0.0f, 0.0f, size.width, size.height);
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.clipsToBounds = YES;
         [JSQMessagesMediaViewBubbleImageMasker applyBubbleImageMaskToMediaView:imageView isOutgoing:self.appliesMediaViewMaskAsOutgoing];
         self.cachedImageView = imageView;
+        if (self.image == nil && _url != nil) {
+            
+            __weak UIImageView *weakCell = self.cachedImageView;
+            [weakCell setImageWithURLRequest:[NSURLRequest requestWithURL:_url] placeholderImage:nil
+                                     success:^(NSURLRequest *request,   NSHTTPURLResponse *response, UIImage *image) {
+                                         if (weakCell)
+                                         {
+                                             weakCell.image = image;
+                                             [weakCell setNeedsLayout];
+                                         }
+                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                         NSLog(@"Error: %@", error);
+                                     }];
+        }
+        
     }
     
     return self.cachedImageView;
