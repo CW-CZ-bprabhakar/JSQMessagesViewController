@@ -60,7 +60,7 @@ didChangeAudioCategory:(NSString *)category
  *  A data object that contains an audio resource.
  */
 @property (nonatomic, strong, nullable) NSData *audioData;
-
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 /**
  *  Initializes and returns a audio media item having the given audioData.
  *
