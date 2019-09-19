@@ -35,8 +35,6 @@
 @property (strong, nonatomic) UILabel *progressLabel;
 @property (strong, nonatomic) NSTimer *progressTimer;
 
-@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
-
 @end
 
 
